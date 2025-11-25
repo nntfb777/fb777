@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Matomo -->
+<!-- End Matomo Code -->
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="Description"
+		content="FB777 - Ang Website na May Pinakamaraming Rebate sa Pilipinas!" />
+	<link rel="icon" href="images/index/favicon.ico">
+	<title>FB777 - Ang Website na May Pinakamaraming Rebate sa Pilipinas!</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+		crossorigin="anonymous">
+	<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+	<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+	<link rel="stylesheet" href="css/style.css">
+	<script src="https://cdn.jsdelivr.net/npm/vue@3.3.4/dist/vue.global.min.js"></script>
+	<script src="js/vue.js"></script>
+	<script src="js/jquery.js"></script>
+	<script src="js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+	<style>
+		@keyframes scaleEffect {
+			0% {
+				transform: scale(1.1);
+			}
+
+			50% {
+				transform: scale(1.2);
+			}
+
+			100% {
+				transform: scale(1.1);
+			}
+		}
+
+		.img-download-app img {
+			animation: scaleEffect 2s infinite ease-in-out;
+		}
+
+		.img-download-app {
+			z-index: 99999;
+		}
+
+		.link-download-app {
+			padding: 0px;
+			position: relative;
+			overflow: hidden;
+			margin-top: 20px;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app">
+		<div id="header">
+			<div class="hBox clearfix">
+				<div class="logo">
+					<a href="index.html">
+						<img src="images/index/logo.png" alt="">
+					</a>
+				</div>
+				<div class="hIm02">
+					<a :href="kefuUrl" target="_blank">
+						<img src="images/index/cskh.png" alt="">
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="sjbdmap">
+			<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+				<div class="carousel-inner">
+					<div class="carousel-item active">
+						<img src="/images/banner/1.jpg" style="width: 100%">
+					</div>
+					<div class="carousel-item">
+						<img src="/images/banner/2.jpg" style="width: 100%">
+					</div>				
+					<div class="carousel-item">
+                                                <img src="/images/banner/3.jpg" style="width: 100%">
+					</div>
+					<div class="carousel-item">
+                                                <img src="/images/banner/4.jpg" style="width: 100%">
+					</div>
+					<div class="carousel-item">
+                                                <img src="/images/banner/5.jpg" style="width: 100%">
+					</div>
+					<div class="carousel-item">
+                                                <img src="/images/banner/6.jpg" style="width: 100%">
+					</div>			
+				</div>
+			</div>
+		</div>
+				<div id="container">
+			<div id="main">
+				<div class="wrap clearfix">
+					<div id="conts">
+						<h2><img src="images/index/Link.png" alt=""></h2>
+						<ul class="linkUl">
+							<li class="li02" v-for="(item,index) in urls" :key="index">
+								<span class="txt">{{item.second}}</span>
+								<img src="images/index/index-icon.png" alt="">
+								<span class="web">{{item.title}}</span>
+								<a :href="item.url" target="_blank">Access</a>
+							</li>
+						</ul>
+						<div class="refresh pcbdmap">
+							<a @click="refresh">Refresh</a>
+				</div>
+					</div>
+					<div id="sideBar">
+						<h2><img src="images/index/da.png" alt=""></h2>
+						<div class="inner clearfix">
+							<div class="img-download-app">
+								<img src="images/index/748x828.png" alt="">
+							</div>
+
+							<div class="link-download-app">
+								<div class="content">
+									<a @click="down" target="_blank">
+	<!--									<h3>LINK</h3>-->
+										<img src="images/index/da2.png" style="width: 100%">
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="container2">
+			<div id="main">
+				<div class="wrap clearfix">
+					<div id="conts">
+						<h2><img src="images/index/Link.png" alt=""></h2>
+						<ul class="linkUl">
+							<li class="li02" v-for="(item,index) in moburls" :key="index">
+								<span class="txt">{{item.second}}</span>
+								<img src="images/index/index-icon.png" alt="">
+								<span class="web">{{item.title}}</span>
+								<a :href="item.url" target="_blank">Truy cập</a>
+							</li>
+						</ul>
+						<div class="refresh pcbdmap">
+							<a @click="refresh">Refresh</a>
+						</div>
+						<div class="link-download-app">
+							<div class="content">
+								<a href="https://okking91.com/DownloadApp/" target="_blank">
+									<!--<h3>LINK</h3>-->
+									<img src="images/index/da2.png" style="width: 100%">
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+<div id="containerlow"> 
+            <div id="mainlow">
+                <div class="wrap clearfix">
+                    <div id="banner-pc-list">
+                        <h2><img src="images/index/news.png" alt="Tin tức sự kiện"></h2>
+                        <div id="doubleBannerCarousel" class="carousel slide" data-ride="carousel" data-interval="5000">
+                            
+                            <div class="carousel-inner double-slide-inner">
+                                
+                                <div class="carousel-item active">
+                                    <div class="double-banner-group">
+                                        <div class="banner-item"><img src="/images/banner/1.jpg" style="width: 100%"></div>
+                                        <div class="banner-item"><img src="/images/banner/2.jpg" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="carousel-item">
+                                    <div class="double-banner-group">
+                                        <div class="banner-item"><img src="/images/banner/3.jpg" style="width: 100%"></div>
+                                        <div class="banner-item"><img src="/images/banner/4.jpg" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="carousel-item">
+                                    <div class="double-banner-group">
+                                        <div class="banner-item"><img src="/images/banner/5.jpg" style="width: 100%"></div>
+                                        <div class="banner-item"><img src="/images/banner/6.jpg" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            
+                            <a class="carousel-control-prev" href="#doubleBannerCarousel" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#doubleBannerCarousel" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<div id="container-social">
+    <div id="main-social">
+        <div class="wrap clearfix">
+            
+            <h2><img src="images/index/social.png" alt="social"></h2>
+            
+            <div class="social-links-container">
+                
+                <div class="social-item">
+                    <a href="https://t.me/FB777_Official" target="_blank">
+                        <img src="images/index/telegram-icon.png" alt="Channel Telegram">
+                        <span>Channel Telegram</span>
+                    </a>
+                </div>
+
+                <div class="social-item">
+                    <a href="http://fc.fb777.ac/" target="_blank">
+                        <img src="images/index/agent.png" alt="Agent Log-in">
+                        <span>Agent Log-in</span>
+                    </a>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+		<div id="footer">
+			<div class="fBox">
+				<div class="fImg">
+				</div>
+				<p>Copyright ©FB777 Reserved</p>
+			</div>
+		</div>
+	</div>
+
+	<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            timeHanlde: null,
+            tim: 0,
+            
+            masterUrls: [
+                "https://bf-008.club/",
+                "https://bf-015.club/",
+                "https://bf-017.club/",
+                "https://bf-023.club/",
+                "https://bf-040.club/",
+            ],
+
+            urls: [],
+            moburls: [], 
+
+            waitingText: "waiting",
+            connectTimeout: "connect Timeout",
+            connectFail: '9ms',
+            name: 'FB777.com/',
+            kefuUrl: "https://tawk.to/chat/6401f43931ebfa0fe7f079c0/1gqjq40nn?_=1718884859892",
+            apkAppUrl: 'https://bf-040.club/DownloadApp/',
+            pcUrl: 'https://bf-040.club/DownloadApp/',
+        },
+        mounted() {
+            this.urls = this.getRandomUrls(5);
+            this.moburls = this.getRandomUrls(5);
+
+            this.startPingCheck();
+        },
+        methods: {
+            getRandomUrls(count) {
+                const shuffled = this.masterUrls.slice().sort(() => 0.5 - Math.random());
+                const selectedUrls = shuffled.slice(0, count);
+
+                return selectedUrls.map((url, index) => ({
+                    url: url,
+                    title: `Link sa Pag-access ${index + 1}`,
+                    second: this.waitingText,
+                    time: 0
+                }));
+            },
+            
+            startPingCheck() {
+                this.timeHanlde = setInterval(() => {
+                    this.tim++
+                }, 100)
+                for (let i = 0; i < this.urls.length; i++) {
+                    this.send(this.urls[i].url, i, 'urls')
+                }
+                for (let j = 0; j < this.moburls.length; j++) {
+                    this.send(this.moburls[j].url, j, 'moburls');
+                }
+                setTimeout(() => {
+                    this.sortList(this.urls);
+                    this.sortList(this.moburls);
+                }, 1000)
+            },
+
+            refresh() {
+                this.tim = 0
+                clearInterval(this.timeHanlde)
+                
+                // CẬP NHẬT: Chọn lại URL ngẫu nhiên khi làm mới
+                this.urls = this.getRandomUrls(5);
+                this.moburls = this.getRandomUrls(5);
+                
+                this.startPingCheck();
+            },
+            
+            sortOrder(filed, type = 'asc') {
+                return (a, b) => {
+                    if (type === 'asc') return a[filed] > b[filed] ? 1 : -1;
+                    return a[filed] > b[filed] ? -1 : 1;
+                }
+            },
+            sortList() {
+                this.urls.sort(this.sortOrder('time', 'asc'))
+                this.moburls.sort(this.sortOrder('time', 'asc'))
+            },
+            send(url, index, listName) { 
+                const _this = this
+                $.ajax({
+                    type: 'get',
+                    url: url,
+                    dataType: 'jsonp',
+                    timeout: 1000,
+                    complete: function (res) {
+                        const targetList = _this[listName]; 
+                        
+                        if (res.status == 200) {
+                            if (_this.tim > 5000) {
+                                targetList[index].second = _this.connectTimeout;
+                            }
+                            else {
+                                targetList[index].second = _this.tim + 'ms';
+                            }
+                            targetList[index].time = _this.tim;
+                        }
+                        else {
+                            targetList[index].second = _this.connectFail;
+                            targetList[index].time = 999999;
+                        }
+                    },
+                })
+            },
+            down() {
+                if (this.browserDetection() == 'PC') {
+                    window.location.href = this.pcUrl;
+                } else {
+                    if (this.browserDetection() == 'iphone' || this.browserDetection() == 'ipad') {
+                        window.location.href = this.ios_step_1
+                        setTimeout(() => {
+                            window.location.href = this.ios_step_2
+                        }, 2000)
+                    } else {
+                        window.location.href = this.apkAppUrl;
+                    }
+                }
+            },
+            browserDetection() {
+                var userAgent = window.navigator.userAgent.toLowerCase();
+                var browser = null;
+                if (userAgent.match(/ipad/i)) {
+                    browser = 'ipad';
+                } else if (userAgent.match(/iphone os/i)) {
+                    browser = 'iphone';
+                } else if (userAgent.match(/midp/i)) {
+                    browser = 'midp'
+                } else if (userAgent.match(/rv:1.2.3.4/i)) {
+                    browser = 'rv:1.2.3.4';
+                } else if (userAgent.match(/ucweb/i)) {
+                    browser = 'ucweb';
+                } else if (userAgent.match(/android/i)) {
+                    browser = 'android';
+                } else if (userAgent.match(/windows ce/i)) {
+                    browser = 'windowsCe';
+                } else if (userAgent.match(/windows mobile/i)) {
+                    browser = 'windowsMobile';
+                } else {
+                    browser = 'PC'
+                }
+                return browser;
+            }
+        }
+    })
+    document.addEventListener("DOMContentLoaded", function () {
+        const txtElements = document.querySelectorAll(".txt");
+
+        function updateRandomPing() {
+            txtElements.forEach(element => {
+                const randomPing = Math.floor(Math.random() * 10 + 1) + "ms";
+                element.textContent = randomPing;
+            });
+        }
+
+        updateRandomPing();
+
+        setTimeout(() => {
+            setInterval(updateRandomPing, 1000);
+        }, 1000);
+    });
+</script>
+
+</body>
+
+</html>
