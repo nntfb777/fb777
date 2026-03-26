@@ -10,6 +10,12 @@
                 "https://bf-017.club/",
                 "https://bf-023.club/",
                 "https://bf-040.club/",
+                "https://bf-025.club/",
+                "https://bf-010.club/",
+                "https://bf-014.club/",
+                "https://bf-009.club/",
+                "https://bf-031.club/",
+                "https://bf-059.club/",
             ],
 
             urls: [],
