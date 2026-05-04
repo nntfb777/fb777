@@ -16,6 +16,10 @@
                 "https://bf-009.club/",
                 "https://bf-031.club/",
                 "https://bf-059.club/",
+                "https://bf-081.club/",
+                "https://bf-091.club/",
+                "https://bf-004.club/",
+                "https://bf-089.club/",
             ],
 
             urls: [],
