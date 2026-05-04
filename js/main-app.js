@@ -5,10 +5,6 @@
             tim: 0,
             
             masterUrls: [
-                "https://bf-015.club/",
-                "https://bf-017.club/",
-                "https://bf-023.club/",
-                "https://bf-040.club/",
                 "https://bf-025.club/",
                 "https://bf-010.club/",
                 "https://bf-014.club/",
