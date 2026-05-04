@@ -24,9 +24,9 @@
             connectTimeout: "connect Timeout",
             connectFail: '9ms',
             name: 'FB777.com/',
-            kefuUrl: "https://tawk.to/chat/6401f43931ebfa0fe7f079c0/1gqjq40nn?_=1718884859892",
+            kefuUrl: "https://w9c0kvv.k0vc1svq.com/chatwindow.aspx?siteId=65002300&planId=1aa9ff7f-27c2-4618-9d93-28d5cd97fec2&chatgroup=3",
             apkAppUrl: 'https://bf-040.club/DownloadApp/',
-            pcUrl: 'https://bf-040.club/DownloadApp/',
+            pcUrl: 'https://bf-089.club/DownloadApp/',
         },
         mounted() {
             this.urls = this.getRandomUrls(5);
