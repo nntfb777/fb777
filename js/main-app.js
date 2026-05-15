@@ -6,7 +6,6 @@
             
             masterUrls: [
                 "https://bf-025.club/",
-                "https://bf-010.club/",
                 "https://bf-014.club/",
                 "https://bf-009.club/",
                 "https://bf-031.club/",
