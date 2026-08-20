@@ -20,7 +20,6 @@ var app = new Vue({
       agentLoginUrl: "http://fc.fb777.ac/",
       giftcodeUrl: "https://bf-023.club//DownloadApp/"
     },
-    // ✅ Cung cấp ảnh mặc định phòng trường hợp API chưa có banner
     banners: [
       "images/banner/1.jpg",
       "images/banner/2.jpg",
@@ -86,39 +85,39 @@ var app = new Vue({
     },
     getRandomUrls(count) {
       if (!this.masterUrls || this.masterUrls.length === 0) return [];
-      // Trộn ngẫu nhiên danh sách link từ API
       const shuffled = this.masterUrls.slice().sort(() => 0.5 - Math.random());
       const selectedUrls = shuffled.slice(0, count);
-      return selectedUrls.map((url, index) => ({
-        url: url,
-        title: `Link sa Pag-access ${index + 1}`,
-        second: this.waitingText,
-        time: 0
-      }));
+      return selectedUrls.map((url, index) => {
+        const fakeMs = Math.floor(Math.random() * (9 - 3 + 1)) + 3;
+        return {
+          url: url,
+          title: `Link sa Pag-access ${index + 1}`,
+          second: fakeMs + 'ms',
+          time: fakeMs
+        };
+      });
     },
     startPingCheck() {
-      // Giả lập kiểm tra ping cho danh sách PC
-      for (let i = 0; i < this.urls.length; i++) {
-        this.sendFakePing(i, 'urls');
-      }
-      // Giả lập kiểm tra ping cho danh sách Mobile
-      for (let j = 0; j < this.moburls.length; j++) {
-        this.sendFakePing(j, 'moburls');
-      }
+      // Xóa bộ đếm cũ nếu có
+      if (this.timeHanlde) clearInterval(this.timeHanlde);
 
-      // Sắp xếp danh sách sau khi đã tạo xong ms giả
-      setTimeout(() => {
-        this.sortList();
-      }, 300);
-    },
-    sendFakePing(index, listName) {
-      // Tạo số ngẫu nhiên từ 3ms đến 9ms
-      const fakeMs = Math.floor(Math.random() * (9 - 3 + 1)) + 3;
-      const targetList = this[listName];
-      if (targetList[index]) {
-        targetList[index].time = fakeMs;
-        targetList[index].second = fakeMs + 'ms';
-      }
+      // Cập nhật ngẫu nhiên số ms liên tục mỗi 1.5 giây
+      this.timeHanlde = setInterval(() => {
+        if (this.urls && this.urls.length > 0) {
+          this.urls.forEach(item => {
+            const fakeMs = Math.floor(Math.random() * (9 - 3 + 1)) + 3;
+            item.time = fakeMs;
+            item.second = fakeMs + 'ms';
+          });
+        }
+        if (this.moburls && this.moburls.length > 0) {
+          this.moburls.forEach(item => {
+            const fakeMs = Math.floor(Math.random() * (9 - 3 + 1)) + 3;
+            item.time = fakeMs;
+            item.second = fakeMs + 'ms';
+          });
+        }
+      }, 1500);
     },
     refresh() {
       this.urls = this.getRandomUrls(5);
