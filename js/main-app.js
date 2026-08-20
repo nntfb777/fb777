@@ -8,7 +8,7 @@ var app = new Vue({
     moburls: [],
     waitingText: "waiting",
     connectTimeout: "connect Timeout",
-    connectFail: '9ms',
+    connectFail: '3ms',
     name: 'FB777.com/',
     kefuUrl: "",
     apkAppUrl: "",
