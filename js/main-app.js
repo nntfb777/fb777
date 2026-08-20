@@ -65,13 +65,16 @@ var app = new Vue({
           if (pc) this.pcUrl = pc.value;
 
           const pings = data.filter(i => i.category === 'ping_link').map(i => i.value);
-          if (pings.length > 0) this.masterUrls = pings;
+          if (pings.length > 0) {
+            this.masterUrls = pings;
+            this.urls = this.getRandomUrls(5);
+            this.moburls = this.getRandomUrls(5);
+          }
 
           data.filter(i => i.category === 'social_link').forEach(item => {
             if (item.value) this.socialLinks[item.key_name] = item.value;
           });
 
-          // Nếu Database có lưu banner thì ghi đè banner mặc định
           const bannerList = data.filter(i => i.category === 'banner_image').map(i => i.value);
           if (bannerList.length > 0) {
             this.banners = bannerList;
