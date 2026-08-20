@@ -1,35 +1,35 @@
-var app = new Vue({
-  el: '#app',
-  data: {
-    timeHanlde: null,
-    tim: 0,
-    masterUrls: [],
-    urls: [],
-    moburls: [],
-    waitingText: "waiting",
-    connectTimeout: "connect Timeout",
-    connectFail: '3ms',
-    name: 'FB777.com/',
-    kefuUrl: "",
-    apkAppUrl: "",
-    pcUrl: "",
-    socialLinks: {
-      telegramUrl: "https://telegram.me/FB777_Official77",
-      dailyTelegramUrl: "https://telegram.me/FB777_Official77",
-      facebookUrl: "",
-      agentLoginUrl: "http://fc.fb777.ac/",
-      giftcodeUrl: "https://bf-023.club//DownloadApp/"
-    },
-    // ✅ Cung cấp ảnh mặc định phòng trường hợp API chưa có banner
-    banners: [
-      "images/banner/1.jpg",
-      "images/banner/2.jpg",
-      "images/banner/3.jpg",
-      "images/banner/4.jpg",
-      "images/banner/5.jpg",
-      "images/banner/6.jpg"
-    ],
-    apiUrl: "https://linksbackend.nnt79g.workers.dev/api/admin/links?site_id=fb777"
+const { createApp } = Vue;
+
+createApp({
+  data() {
+    return {
+      timeHanlde: null,
+      tim: 0,
+      masterUrls: [],
+      urls: [],
+      moburls: [],
+      waitingText: "waiting",
+      connectTimeout: "connect Timeout",
+      connectFail: '9ms',
+      name: 'FB777.com/',
+      kefuUrl: "",
+      apkAppUrl: "",
+      pcUrl: "",
+      socialLinks: {
+        telegramUrl: "https://telegram.me/FB777_Official77",
+        dailyTelegramUrl: "https://telegram.me/FB777_Official77",
+        facebookUrl: "",
+        agentLoginUrl: "http://fc.fb777.ac/",
+        giftcodeUrl: "https://bf-023.club//DownloadApp/"
+      },
+      banners: [
+        "images/banner/1.jpg",
+        "images/banner/2.jpg",
+        "images/banner/3.jpg",
+        "images/banner/4.jpg"
+      ],
+      apiUrl: "https://linksbackend.nnt79g.workers.dev/api/admin/links/list?site_id=fb777"
+    };
   },
   computed: {
     groupedBanners() {
@@ -67,6 +67,7 @@ var app = new Vue({
           const pings = data.filter(i => i.category === 'ping_link').map(i => i.value);
           if (pings.length > 0) {
             this.masterUrls = pings;
+            // Khởi tạo lại danh sách xáo trộn ngẫu nhiên sau khi có Master URLs từ API
             this.urls = this.getRandomUrls(5);
             this.moburls = this.getRandomUrls(5);
           }
@@ -96,6 +97,7 @@ var app = new Vue({
       }));
     },
     startPingCheck() {
+      if (this.timeHanlde) clearInterval(this.timeHanlde);
       this.timeHanlde = setInterval(() => {
         this.tim++;
       }, 100);
@@ -108,13 +110,12 @@ var app = new Vue({
       }
 
       setTimeout(() => {
-        this.sortList(this.urls);
-        this.sortList(this.moburls);
+        this.sortList();
       }, 1000);
     },
     refresh() {
       this.tim = 0;
-      clearInterval(this.timeHanlde);
+      if (this.timeHanlde) clearInterval(this.timeHanlde);
       this.urls = this.getRandomUrls(5);
       this.moburls = this.getRandomUrls(5);
       this.startPingCheck();
@@ -131,65 +132,40 @@ var app = new Vue({
     },
     send(url, index, listName) {
       const _this = this;
-      $.ajax({
-        type: 'get',
-        url: url,
-        dataType: 'jsonp',
-        timeout: 1000,
-        complete: function (res) {
-          const targetList = _this[listName];
-          if (res.status == 200) {
-            if (_this.tim > 5000) {
-              targetList[index].second = _this.connectTimeout;
-            } else {
-              targetList[index].second = _this.tim + 'ms';
+      if (typeof $ !== 'undefined' && $.ajax) {
+        $.ajax({
+          type: 'get',
+          url: url,
+          dataType: 'jsonp',
+          timeout: 1000,
+          complete: function (res) {
+            const targetList = _this[listName];
+            if (targetList && targetList[index]) {
+              if (res.status == 200) {
+                targetList[index].second = _this.tim > 5000 ? _this.connectTimeout : _this.tim + 'ms';
+                targetList[index].time = _this.tim;
+              } else {
+                targetList[index].second = _this.connectFail;
+                targetList[index].time = 999999;
+              }
             }
-            targetList[index].time = _this.tim;
-          } else {
-            targetList[index].second = _this.connectFail;
-            targetList[index].time = 999999;
-          }
-        },
-      });
+          },
+        });
+      }
     },
     down() {
       if (this.browserDetection() == 'PC') {
-        window.location.href = this.pcUrl;
+        window.location.href = this.pcUrl || '#';
       } else {
-        if (this.browserDetection() == 'iphone' || this.browserDetection() == 'ipad') {
-          window.location.href = this.ios_step_1;
-          setTimeout(() => {
-            window.location.href = this.ios_step_2;
-          }, 2000);
-        } else {
-          window.location.href = this.apkAppUrl;
-        }
+        window.location.href = this.apkAppUrl || '#';
       }
     },
-computed: {
-  groupedBanners() {
-    const pairs = [];
-    for (let i = 0; i < this.banners.length; i += 2) {
-      pairs.push(this.banners.slice(i, i + 2));
-    }
-    return pairs;
-  }
-},
     browserDetection() {
       var userAgent = window.navigator.userAgent.toLowerCase();
-      var browser = null;
-      if (userAgent.match(/ipad/i)) {
-        browser = 'ipad';
-      } else if (userAgent.match(/iphone os/i)) {
-        browser = 'iphone';
-      } else if (userAgent.match(/midp/i)) {
-        browser = 'midp';
-      } else if (userAgent.match(/android/i)) {
-        browser = 'android';
-      } else {
-        browser = 'PC';
+      if (userAgent.match(/ipad|iphone|android|midp/i)) {
+        return 'mobile';
       }
-      return browser;
+      return 'PC';
     }
   }
-});
+}).mount('#app');
