@@ -160,10 +160,14 @@
                         <div id="doubleBannerCarousel" class="carousel slide" data-ride="carousel" data-interval="5000">
 
                             <div class="carousel-inner" v-if="banners.length > 0">
-                              <div v-for="(img, idx) in banners" :key="idx" :class="['carousel-item', { active: idx === 0 }]">
-                                <img :src="img" style="width: 100%">
-                              </div>
-                            </div>
+  <div v-for="(pair, idx) in groupedBanners" :key="idx" :class="['carousel-item', { active: idx === 0 }]">
+    <div class="row">
+      <div v-for="(img, imgIdx) in pair" :key="imgIdx" class="col-6">
+        <img :src="img" style="width: 100%">
+      </div>
+    </div>
+  </div>
+</div>
 
                         </div>
                     </div>
@@ -179,14 +183,14 @@
                     <div class="social-links-container">
 
                         <div class="social-item">
-                            <a href="socialLinks.telegramUrl" target="_blank">
+                            <a :href="socialLinks.telegramUrl" target="_blank">
                                 <img src="images/index/telegram-icon.png" alt="Channel Telegram">
                                 <span>Channel Telegram</span>
                             </a>
                         </div>
 
                         <div class="social-item">
-                            <a href="socialLinks.agentLoginUrl" target="_blank">
+                            <a :href="socialLinks.agentLoginUrl" target="_blank">
                                 <img src="images/index/agent.png" alt="Agent Log-in">
                                 <span>Agent Log-in</span>
                             </a>
