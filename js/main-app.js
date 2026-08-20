@@ -3,7 +3,7 @@ var app = new Vue({
   data: {
     timeHanlde: null,
     tim: 0,
-    masterUrls: [], // Mảng rỗng, hoàn toàn dựa vào API
+    masterUrls: [],
     urls: [],
     moburls: [],
     waitingText: "waiting",
@@ -34,7 +34,6 @@ var app = new Vue({
     }
   },
   async mounted() {
-    // Tải duy nhất dữ liệu từ API Admin CMS
     await this.fetchLinksFromApi();
   },
   methods: {
@@ -54,12 +53,18 @@ var app = new Vue({
           if (apk && apk.value) this.apkAppUrl = apk.value;
           if (pc && pc.value) this.pcUrl = pc.value;
 
-          // Lấy mảng link ping từ API
+          // 1. Lấy mảng link ping từ API
           var pings = data.filter(function(i) { return i.category === 'ping_link'; }).map(function(i) { return i.value; });
           if (pings.length > 0) {
             this.masterUrls = pings;
-            // Tiến hành khởi tạo và xáo trộn ngẫu nhiên danh sách link từ API
-            this.refresh();
+            
+            // 2. Tải link LẦN ĐẦU THEO ĐÚNG THỨ TỰ API (chưa xáo trộn)
+            this.initOrderedUrls();
+            
+            // 3. Sau khi trang tải xong 1.5 giây, tiến hành thay đổi thứ tự ngẫu nhiên
+            setTimeout(() => {
+              this.refresh();
+            }, 1500);
           }
 
           var _this = this;
@@ -76,6 +81,23 @@ var app = new Vue({
         console.error("Lỗi nạp link từ API:", err);
       }
     },
+    // Khởi tạo link theo ĐÚNG THỨ TỰ gốc từ API
+    initOrderedUrls() {
+      var _this = this;
+      var list = this.masterUrls.slice(0, 5).map(function(url, index) {
+        var fakeMs = Math.floor(Math.random() * 12) + 3;
+        return {
+          url: url,
+          title: 'Link sa Pag-access ' + (index + 1),
+          second: fakeMs + 'ms',
+          time: fakeMs
+        };
+      });
+      this.urls = JSON.parse(JSON.stringify(list));
+      this.moburls = JSON.parse(JSON.stringify(list));
+      this.startFakePing();
+    },
+    // Xáo trộn ngẫu nhiên link sau khi trang tải xong
     getRandomUrls(count) {
       if (!this.masterUrls || this.masterUrls.length === 0) return [];
       var shuffled = this.masterUrls.slice().sort(function() { return 0.5 - Math.random(); });
