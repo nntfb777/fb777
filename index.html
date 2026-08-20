@@ -2,176 +2,210 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="Description" content="FB777 - Ang Website na May Pinakamaraming Rebate sa Pilipinas!" />
-  <link rel="icon" href="images/index/favicon.ico">
-  <title>FB777 - Ang Website na May Pinakamaraming Rebate sa Pilipinas!</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" crossorigin="anonymous">
-  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-  <link rel="stylesheet" href="css/style.css">
-  <script src="js/vue.js"></script>
-  <style>
-    @keyframes scaleEffect {
-      0% { transform: scale(1.1); }
-      50% { transform: scale(1.2); }
-      100% { transform: scale(1.1); }
-    }
-    .img-download-app img {
-      animation: scaleEffect 2s infinite ease-in-out;
-    }
-    .img-download-app {
-      z-index: 99999;
-    }
-    .link-download-app {
-      padding: 0px;
-      position: relative;
-      overflow: hidden;
-      margin-top: 20px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="Description"
+        content="FB777 - Ang Website na May Pinakamaraming Rebate sa Pilipinas!" />
+    <link rel="icon" href="images/index/favicon.ico">
+    <title>FB777 - Ang Website na May Pinakamaraming Rebate sa Pilipinas!</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+        crossorigin="anonymous">
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.3.4/dist/vue.global.min.js"></script>
+    <script src="js/vue.js"></script>
+
+    <style>
+        @keyframes scaleEffect {
+            0% {
+                transform: scale(1.1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1.1);
+            }
+        }
+
+        .img-download-app img {
+            animation: scaleEffect 2s infinite ease-in-out;
+        }
+
+        .img-download-app {
+            z-index: 99999;
+        }
+
+        .link-download-app {
+            padding: 0px;
+            position: relative;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 
 <body>
-  <div id="app">
-    <!-- HEADER GỐC -->
-    <div id="header">
-      <div class="hBox clearfix">
-        <div class="logo">
-          <a href="index.html">
-            <img src="images/index/logo.png" alt="">
-          </a>
-        </div>
-        <div class="hIm02">
-          <a :href="kefuUrl" target="_blank">
-            <img src="images/index/cskh.png" alt="">
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- 1. GIAO DIỆN MOBILE (Hiển thị 1 ảnh / slide) -->
-    <div class="sjbdmap">
-      <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner" v-if="banners.length > 0">
-          <div 
-            v-for="(img, idx) in banners" 
-            :key="idx" 
-            :class="['carousel-item', { active: idx === 0 }]"
-          >
-            <img :src="img" class="d-block w-100" style="border-radius: 8px;">
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- KHỐI THÔNG BÁO GỐC -->
-    <div id="index-notice">
-      <div class="wrap clearfix">
-        <div class="box clearfix">
-          <div class="ic">
-            <img src="images/index/laba.png" alt="">
-          </div>
-          <div class="content">
-            <marquee class="ggtxt" direction="left" behavior="scroll" scrollamount="5" scrolldelay="10" onmouseover="this.stop()" onmouseout="this.start()">
-              Maligayang pagdating sa FB777! Ang aming opisyal na website ay nagbibigay ng pinakamahusay na karanasan sa paglalaro at pinakamabilis na serbisyo.
-            </marquee>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- KHỐI SPEED MOBILE GỐC -->
-    <div class="sjb-speed">
-      <div class="title">
-        <img src="images/index/speed-title.png" alt="">
-      </div>
-      <div class="list">
-        <div class="item clearfix" v-for="(item, index) in moburls" :key="index">
-          <div class="txt">{{ item.title }}</div>
-          <div class="ms">{{ item.second }}</div>
-          <div class="btn">
-            <a :href="item.url" target="_blank">BUMISITA</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- KHỐI CONTAINER GỐC -->
-    <div id="container">
-      <div id="main">
-        <div class="wrap clearfix">
-          <div id="conts">
-            <h2><img src="images/index/Link.png" alt=""></h2>
-            <ul class="linkUl">
-              <li class="li02" v-for="(item,index) in urls" :key="index">
-                <span class="txt">{{item.second}}</span>
-                <img src="images/index/index-icon.png" alt="">
-                <span class="web">{{item.title}}</span>
-                <a :href="item.url" target="_blank">Access</a>
-              </li>
-            </ul>
-          </div>
-          <div class="refresh pcbdmap">
-            <a href="javascript:void(0)" @click="refresh()">
-              <img src="images/index/sx.png" alt="">Refresh
-            </a>
-          </div>
-
-          <div class="link-download-app text-center">
-            <a :href="apkAppUrl" target="_blank" class="img-download-app d-block">
-              <img src="images/index/da.png" style="width: 100%" alt="">
-            </a>
-          </div>
-
-          <div class="link-download-app text-center">
-            <a :href="socialLinks.giftcodeUrl" target="_blank">
-              <img src="images/index/da2.png" style="width: 100%" alt="">
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 2. GIAO DIỆN MÁY TÍNH (Hiển thị 2 ảnh / slide) -->
-    <div id="containerlow">
-      <div id="mainlow">
-        <div class="wrap clearfix">
-          <div id="banner-pc-list">
-            <h2><img src="images/index/news.png" alt=""></h2>
-            <div id="doubleBannerCarousel" class="carousel slide" data-ride="carousel">
-              <div class="carousel-inner" v-if="banners.length > 0">
-                <div 
-                  v-for="(pair, idx) in groupedBanners" 
-                  :key="idx" 
-                  :class="['carousel-item', { active: idx === 0 }]"
-                >
-                  <div class="row">
-                    <div v-for="(img, imgIdx) in pair" :key="imgIdx" class="col-6">
-                      <img :src="img" style="width: 100%; border-radius: 8px;">
-                    </div>
-                  </div>
+    <div id="app">
+        <div id="header">
+            <div class="hBox clearfix">
+                <div class="logo">
+                    <a href="index.html">
+                        <img src="images/index/logo.png" alt="">
+                    </a>
                 </div>
-              </div>
+                <div class="hIm02">
+                    <a :href="kefuUrl" target="_blank">
+                        <img src="images/index/cskh.png" alt="">
+                    </a>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
 
-    <!-- FOOTER GỐC -->
-    <div id="footer">
-      <div class="wrap text-center">
-        <p>Copyright © FB777 Reserved</p>
-      </div>
-    </div>
-  </div>
+        <!-- 1. CAROUSEL MOBILE (Chỉ hiện 1 hình mỗi lần) -->
+        <div class="sjbdmap">
+            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner" v-if="banners.length > 0">
+                    <div 
+                        v-for="(img, idx) in banners" 
+                        :key="idx" 
+                        :class="['carousel-item', { active: idx === 0 }]"
+                    >
+                        <img :src="img" class="d-block w-100" style="border-radius: 8px;">
+                    </div>
+                </div>
+            </div>
+        </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-  <script src="js/main-app.js"></script>
+        <div id="container">
+            <div id="main">
+                <div class="wrap clearfix">
+                    <div id="conts">
+                        <h2><img src="images/index/Link.png" alt=""></h2>
+                        <ul class="linkUl">
+                            <li class="li02" v-for="(item,index) in urls" :key="index">
+                                <span class="txt">{{item.second}}</span>
+                                <img src="images/index/index-icon.png" alt="">
+                                <span class="web">{{item.title}}</span>
+                                <a :href="item.url" target="_blank">Access</a>
+                            </li>
+                        </ul>
+                        <div class="refresh pcbdmap">
+                            <a @click="refresh">Refresh</a>
+                        </div>
+                    </div>
+                    <div id="sideBar">
+                        <h2><img src="images/index/da.png" alt=""></h2>
+                        <div class="inner clearfix">
+                            <div class="img-download-app">
+                                <img src="images/index/748x828.png" alt="">
+                            </div>
+
+                            <div class="link-download-app">
+                                <div class="content">
+                                    <a @click="down" target="_blank">
+                                        <img src="images/index/da2.png" style="width: 100%">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="container2">
+            <div id="main">
+                <div class="wrap clearfix">
+                    <div id="conts">
+                        <h2><img src="images/index/Link.png" alt=""></h2>
+                        <ul class="linkUl">
+                            <li class="li02" v-for="(item,index) in moburls" :key="index">
+                                <span class="txt">{{item.second}}</span>
+                                <img src="images/index/index-icon.png" alt="">
+                                <span class="web">{{item.title}}</span>
+                                <a :href="item.url" target="_blank">Access</a>
+                            </li>
+                        </ul>
+                        <div class="refresh pcbdmap">
+                            <a @click="refresh">Refresh</a>
+                        </div>
+                        <div class="link-download-app">
+                            <div class="content">
+                                <a href="https://bf-023.club//DownloadApp/" target="_blank">
+                                    <img src="images/index/da2.png" style="width: 100%">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. CAROUSEL PC (Hiện 2 hình mỗi lần di chuyển) -->
+        <div id="containerlow">
+            <div id="mainlow">
+                <div class="wrap clearfix">
+                    <div id="banner-pc-list">
+                        <h2><img src="images/index/news.png" alt="Tin tức sự kiện"></h2>
+                        <div id="doubleBannerCarousel" class="carousel slide" data-ride="carousel" data-interval="5000">
+                            <div class="carousel-inner" v-if="banners.length > 0">
+                                <div 
+                                    v-for="(pair, idx) in groupedBanners" 
+                                    :key="idx" 
+                                    :class="['carousel-item', { active: idx === 0 }]"
+                                >
+                                    <div class="row">
+                                        <div v-for="(img, imgIdx) in pair" :key="imgIdx" class="col-6">
+                                            <img :src="img" style="width: 100%; border-radius: 8px;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="container-social">
+            <div id="main-social">
+                <div class="wrap clearfix">
+                    <h2><img src="images/index/social.png" alt="social"></h2>
+                    <div class="social-links-container">
+                        <div class="social-item">
+                            <a :href="socialLinks.telegramUrl" target="_blank">
+                                <img src="images/index/telegram-icon.png" alt="Channel Telegram">
+                                <span>Channel Telegram</span>
+                            </a>
+                        </div>
+
+                        <div class="social-item">
+                            <a :href="socialLinks.agentLoginUrl" target="_blank">
+                                <img src="images/index/agent.png" alt="Agent Log-in">
+                                <span>Agent Log-in</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="footer">
+            <div class="fBox">
+                <div class="fImg">
+                </div>
+                <p>Copyright ©FB777 Reserved</p>
+            </div>
+        </div>
+    </div>
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="js/main-app.js"></script>
+
 </body>
 
 </html>
