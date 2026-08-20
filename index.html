@@ -159,39 +159,11 @@
                         <h2><img src="images/index/news.png" alt="Tin tức sự kiện"></h2>
                         <div id="doubleBannerCarousel" class="carousel slide" data-ride="carousel" data-interval="5000">
 
-                            <div class="carousel-inner double-slide-inner">
-
-                                <div class="carousel-item active">
-                                    <div class="double-banner-group">
-                                        <div class="banner-item"><img src="/images/banner/1.jpg" style="width: 100%"></div>
-                                        <div class="banner-item"><img src="/images/banner/2.jpg" style="width: 100%"></div>
-                                    </div>
-                                </div>
-
-                                <div class="carousel-item">
-                                    <div class="double-banner-group">
-                                        <div class="banner-item"><img src="/images/banner/3.jpg" style="width: 100%"></div>
-                                        <div class="banner-item"><img src="/images/banner/4.jpg" style="width: 100%"></div>
-                                    </div>
-                                </div>
-
-                                <div class="carousel-item">
-                                    <div class="double-banner-group">
-                                        <div class="banner-item"><img src="/images/banner/5.jpg" style="width: 100%"></div>
-                                        <div class="banner-item"><img src="/images/banner/6.jpg" style="width: 100%"></div>
-                                    </div>
-                                </div>
-
+                            <div class="carousel-inner" v-if="banners.length > 0">
+                              <div v-for="(img, idx) in banners" :key="idx" :class="['carousel-item', { active: idx === 0 }]">
+                                <img :src="img" style="width: 100%">
+                              </div>
                             </div>
-
-                            <a class="carousel-control-prev" href="#doubleBannerCarousel" role="button" data-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                            <a class="carousel-control-next" href="#doubleBannerCarousel" role="button" data-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Next</span>
-                            </a>
 
                         </div>
                     </div>
@@ -207,14 +179,14 @@
                     <div class="social-links-container">
 
                         <div class="social-item">
-                            <a href="https://telegram.me/FB777_Official77" target="_blank">
+                            <a href="socialLinks.telegramUrl" target="_blank">
                                 <img src="images/index/telegram-icon.png" alt="Channel Telegram">
                                 <span>Channel Telegram</span>
                             </a>
                         </div>
 
                         <div class="social-item">
-                            <a href="http://fc.fb777.ac/" target="_blank">
+                            <a href="socialLinks.agentLoginUrl" target="_blank">
                                 <img src="images/index/agent.png" alt="Agent Log-in">
                                 <span>Agent Log-in</span>
                             </a>
