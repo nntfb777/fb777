@@ -3,7 +3,7 @@ var app = new Vue({
   data: {
     timeHanlde: null,
     tim: 0,
-    masterUrls: [], // Sẽ được nạp tự động từ API
+    masterUrls: [], 
     urls: [],
     moburls: [],
     waitingText: "waiting",
@@ -13,14 +13,18 @@ var app = new Vue({
     kefuUrl: "",
     apkAppUrl: "",
     pcUrl: "",
-    // Khai báo biến API backend của FB777
+    socialLinks: {
+      telegramUrl: "https://telegram.me/FB777_Official77",
+      dailyTelegramUrl: "https://telegram.me/FB777_Official77",
+      facebookUrl: "",
+      agentLoginUrl: "http://fc.fb777.ac/",
+      giftcodeUrl: "https://bf-023.club//DownloadApp/"
+    },
+    banners: [],
     apiUrl: "https://linksbackend.nnt79g.workers.dev/api/admin/links?site_id=fb777"
   },
   async mounted() {
-    // 1. Tải dữ liệu link từ API
     await this.fetchLinksFromApi();
-    
-    // 2. Sau khi có dữ liệu mới tiến hành ping check
     this.urls = this.getRandomUrls(5);
     this.moburls = this.getRandomUrls(5);
     this.startPingCheck();
@@ -34,7 +38,7 @@ var app = new Vue({
         if (result.success && result.data) {
           const data = result.data;
 
-          // Gán Link Hệ Thống
+          // 1. Gán Link Hệ Thống
           const kefu = data.find(i => i.key_name === 'kefuUrl');
           const apk = data.find(i => i.key_name === 'apkAppUrl');
           const pc = data.find(i => i.key_name === 'pcUrl');
@@ -43,11 +47,18 @@ var app = new Vue({
           if (apk) this.apkAppUrl = apk.value;
           if (pc) this.pcUrl = pc.value;
 
-          // Gán Master URLs (Ping links)
+          // 2. Gán Master URLs (Ping links)
           const pings = data.filter(i => i.category === 'ping_link').map(i => i.value);
-          if (pings.length > 0) {
-            this.masterUrls = pings;
-          }
+          if (pings.length > 0) this.masterUrls = pings;
+
+          // 3. Gán Social Links
+          data.filter(i => i.category === 'social_link').forEach(item => {
+            if (item.value) this.socialLinks[item.key_name] = item.value;
+          });
+
+          // 4. Gán Banner Slideshow
+          const bannerList = data.filter(i => i.category === 'banner_image').map(i => i.value);
+          if (bannerList.length > 0) this.banners = bannerList;
         }
       } catch (err) {
         console.error("Lỗi tải link từ API:", err);
