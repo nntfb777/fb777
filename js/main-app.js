@@ -1,48 +1,26 @@
-const { createApp } = Vue;
-
-createApp({
-  data() {
-    return {
-      timeHanlde: null,
-      tim: 0,
-      masterUrls: [],
-      urls: [],
-      moburls: [],
-      waitingText: "waiting",
-      connectTimeout: "connect Timeout",
-      connectFail: '9ms',
-      name: 'FB777.com/',
-      kefuUrl: "",
-      apkAppUrl: "",
-      pcUrl: "",
-      socialLinks: {
-        telegramUrl: "https://telegram.me/FB777_Official77",
-        dailyTelegramUrl: "https://telegram.me/FB777_Official77",
-        facebookUrl: "",
-        agentLoginUrl: "http://fc.fb777.ac/",
-        giftcodeUrl: "https://bf-023.club//DownloadApp/"
-      },
-      banners: [
-        "images/banner/1.jpg",
-        "images/banner/2.jpg",
-        "images/banner/3.jpg",
-        "images/banner/4.jpg"
-      ],
-      apiUrl: "https://linksbackend.nnt79g.workers.dev/api/admin/links?site_id=fb777"
-    };
-  },
-  computed: {
-    groupedBanners() {
-      const pairs = [];
-      if (!this.banners || this.banners.length === 0) return pairs;
-      for (let i = 0; i < this.banners.length; i += 2) {
-        pairs.push(this.banners.slice(i, i + 2));
-      }
-      return pairs;
-    }
+var app = new Vue({
+  el: '#app',
+  data: {
+    timeHanlde: null,
+    tim: 0,
+    masterUrls: [], // Sẽ được nạp tự động từ API
+    urls: [],
+    moburls: [],
+    waitingText: "waiting",
+    connectTimeout: "connect Timeout",
+    connectFail: '9ms',
+    name: 'FB777.com/',
+    kefuUrl: "",
+    apkAppUrl: "",
+    pcUrl: "",
+    // Khai báo biến API backend của FB777
+    apiUrl: "https://linksbackend.nnt79g.workers.dev/api/admin/links?site_id=fb777"
   },
   async mounted() {
+    // 1. Tải dữ liệu link từ API
     await this.fetchLinksFromApi();
+    
+    // 2. Sau khi có dữ liệu mới tiến hành ping check
     this.urls = this.getRandomUrls(5);
     this.moburls = this.getRandomUrls(5);
     this.startPingCheck();
@@ -56,6 +34,7 @@ createApp({
         if (result.success && result.data) {
           const data = result.data;
 
+          // Gán Link Hệ Thống
           const kefu = data.find(i => i.key_name === 'kefuUrl');
           const apk = data.find(i => i.key_name === 'apkAppUrl');
           const pc = data.find(i => i.key_name === 'pcUrl');
@@ -64,21 +43,10 @@ createApp({
           if (apk) this.apkAppUrl = apk.value;
           if (pc) this.pcUrl = pc.value;
 
+          // Gán Master URLs (Ping links)
           const pings = data.filter(i => i.category === 'ping_link').map(i => i.value);
           if (pings.length > 0) {
             this.masterUrls = pings;
-            // Khởi tạo lại danh sách xáo trộn ngẫu nhiên sau khi có Master URLs từ API
-            this.urls = this.getRandomUrls(5);
-            this.moburls = this.getRandomUrls(5);
-          }
-
-          data.filter(i => i.category === 'social_link').forEach(item => {
-            if (item.value) this.socialLinks[item.key_name] = item.value;
-          });
-
-          const bannerList = data.filter(i => i.category === 'banner_image').map(i => i.value);
-          if (bannerList.length > 0) {
-            this.banners = bannerList;
           }
         }
       } catch (err) {
@@ -97,7 +65,6 @@ createApp({
       }));
     },
     startPingCheck() {
-      if (this.timeHanlde) clearInterval(this.timeHanlde);
       this.timeHanlde = setInterval(() => {
         this.tim++;
       }, 100);
@@ -110,12 +77,13 @@ createApp({
       }
 
       setTimeout(() => {
-        this.sortList();
+        this.sortList(this.urls);
+        this.sortList(this.moburls);
       }, 1000);
     },
     refresh() {
       this.tim = 0;
-      if (this.timeHanlde) clearInterval(this.timeHanlde);
+      clearInterval(this.timeHanlde);
       this.urls = this.getRandomUrls(5);
       this.moburls = this.getRandomUrls(5);
       this.startPingCheck();
@@ -132,40 +100,56 @@ createApp({
     },
     send(url, index, listName) {
       const _this = this;
-      if (typeof $ !== 'undefined' && $.ajax) {
-        $.ajax({
-          type: 'get',
-          url: url,
-          dataType: 'jsonp',
-          timeout: 1000,
-          complete: function (res) {
-            const targetList = _this[listName];
-            if (targetList && targetList[index]) {
-              if (res.status == 200) {
-                targetList[index].second = _this.tim > 5000 ? _this.connectTimeout : _this.tim + 'ms';
-                targetList[index].time = _this.tim;
-              } else {
-                targetList[index].second = _this.connectFail;
-                targetList[index].time = 999999;
-              }
+      $.ajax({
+        type: 'get',
+        url: url,
+        dataType: 'jsonp',
+        timeout: 1000,
+        complete: function (res) {
+          const targetList = _this[listName];
+          if (res.status == 200) {
+            if (_this.tim > 5000) {
+              targetList[index].second = _this.connectTimeout;
+            } else {
+              targetList[index].second = _this.tim + 'ms';
             }
-          },
-        });
-      }
+            targetList[index].time = _this.tim;
+          } else {
+            targetList[index].second = _this.connectFail;
+            targetList[index].time = 999999;
+          }
+        },
+      });
     },
     down() {
       if (this.browserDetection() == 'PC') {
-        window.location.href = this.pcUrl || '#';
+        window.location.href = this.pcUrl;
       } else {
-        window.location.href = this.apkAppUrl || '#';
+        if (this.browserDetection() == 'iphone' || this.browserDetection() == 'ipad') {
+          window.location.href = this.ios_step_1;
+          setTimeout(() => {
+            window.location.href = this.ios_step_2;
+          }, 2000);
+        } else {
+          window.location.href = this.apkAppUrl;
+        }
       }
     },
     browserDetection() {
       var userAgent = window.navigator.userAgent.toLowerCase();
-      if (userAgent.match(/ipad|iphone|android|midp/i)) {
-        return 'mobile';
+      var browser = null;
+      if (userAgent.match(/ipad/i)) {
+        browser = 'ipad';
+      } else if (userAgent.match(/iphone os/i)) {
+        browser = 'iphone';
+      } else if (userAgent.match(/midp/i)) {
+        browser = 'midp';
+      } else if (userAgent.match(/android/i)) {
+        browser = 'android';
+      } else {
+        browser = 'PC';
       }
-      return 'PC';
+      return browser;
     }
   }
-}).mount('#app');
+});
