@@ -146,6 +146,15 @@ var app = new Vue({
         }
       }
     },
+computed: {
+  groupedBanners() {
+    const pairs = [];
+    for (let i = 0; i < this.banners.length; i += 2) {
+      pairs.push(this.banners.slice(i, i + 2));
+    }
+    return pairs;
+  }
+},
     browserDetection() {
       var userAgent = window.navigator.userAgent.toLowerCase();
       var browser = null;
