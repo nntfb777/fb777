@@ -3,7 +3,7 @@ var app = new Vue({
   data: {
     timeHanlde: null,
     tim: 0,
-    masterUrls: [], // Sẽ được nạp tự động từ API
+    masterUrls: [],
     urls: [],
     moburls: [],
     waitingText: "waiting",
@@ -13,143 +13,128 @@ var app = new Vue({
     kefuUrl: "",
     apkAppUrl: "",
     pcUrl: "",
-    // Khai báo biến API backend của FB777
+    socialLinks: {
+      telegramUrl: "https://telegram.me/FB777_Official77",
+      dailyTelegramUrl: "https://telegram.me/FB777_Official77",
+      facebookUrl: "",
+      agentLoginUrl: "http://fc.fb777.ac/",
+      giftcodeUrl: ""
+    },
+    banners: [
+      "images/banner/1.jpg",
+      "images/banner/2.jpg",
+      "images/banner/3.jpg",
+      "images/banner/4.jpg"
+    ],
     apiUrl: "https://linksbackend.nnt79g.workers.dev/api/admin/links?site_id=fb777"
   },
+  computed: {
+    groupedBanners: function () {
+      var pairs = [];
+      if (!this.banners || this.banners.length === 0) return pairs;
+      for (var i = 0; i < this.banners.length; i += 2) {
+        pairs.push(this.banners.slice(i, i + 2));
+      }
+      return pairs;
+    }
+  },
   async mounted() {
-    // 1. Tải dữ liệu link từ API
-    await this.fetchLinksFromApi();
-    
-    // 2. Sau khi có dữ liệu mới tiến hành ping check
+    // 1. Khởi tạo danh sách giả lập ban đầu
     this.urls = this.getRandomUrls(5);
     this.moburls = this.getRandomUrls(5);
-    this.startPingCheck();
+    this.startFakePing();
+
+    // 2. Tải link mới từ API Admin CMS
+    await this.fetchLinksFromApi();
   },
   methods: {
     async fetchLinksFromApi() {
       try {
-        const res = await fetch(this.apiUrl);
-        const result = await res.json();
+        var res = await fetch(this.apiUrl);
+        var result = await res.json();
         
-        if (result.success && result.data) {
-          const data = result.data;
+        if (result.success && result.data && result.data.length > 0) {
+          var data = result.data;
 
-          // Gán Link Hệ Thống
-          const kefu = data.find(i => i.key_name === 'kefuUrl');
-          const apk = data.find(i => i.key_name === 'apkAppUrl');
-          const pc = data.find(i => i.key_name === 'pcUrl');
+          var kefu = data.find(function(i) { return i.key_name === 'kefuUrl'; });
+          var apk = data.find(function(i) { return i.key_name === 'apkAppUrl'; });
+          var pc = data.find(function(i) { return i.key_name === 'pcUrl'; });
 
-          if (kefu) this.kefuUrl = kefu.value;
-          if (apk) this.apkAppUrl = apk.value;
-          if (pc) this.pcUrl = pc.value;
+          if (kefu && kefu.value) this.kefuUrl = kefu.value;
+          if (apk && apk.value) this.apkAppUrl = apk.value;
+          if (pc && pc.value) this.pcUrl = pc.value;
 
-          // Gán Master URLs (Ping links)
-          const pings = data.filter(i => i.category === 'ping_link').map(i => i.value);
+          var pings = data.filter(function(i) { return i.category === 'ping_link'; }).map(function(i) { return i.value; });
           if (pings.length > 0) {
             this.masterUrls = pings;
+            this.refresh();
+          }
+
+          var _this = this;
+          data.filter(function(i) { return i.category === 'social_link'; }).forEach(function(item) {
+            if (item.value) _this.socialLinks[item.key_name] = item.value;
+          });
+
+          var bannerList = data.filter(function(i) { return i.category === 'banner_image'; }).map(function(i) { return i.value; });
+          if (bannerList.length > 0) {
+            this.banners = bannerList;
           }
         }
       } catch (err) {
-        console.error("Lỗi tải link từ API:", err);
+        console.log("Lỗi nạp API:", err);
       }
     },
     getRandomUrls(count) {
       if (!this.masterUrls || this.masterUrls.length === 0) return [];
-      const shuffled = this.masterUrls.slice().sort(() => 0.5 - Math.random());
-      const selectedUrls = shuffled.slice(0, count);
-      return selectedUrls.map((url, index) => ({
-        url: url,
-        title: `Link sa Pag-access ${index + 1}`,
-        second: this.waitingText,
-        time: 0
-      }));
+      var shuffled = this.masterUrls.slice().sort(function() { return 0.5 - Math.random(); });
+      var selectedUrls = shuffled.slice(0, count);
+      return selectedUrls.map(function(url, index) {
+        // Tạo sẵn chỉ số ping ngẫu nhiên từ 3ms đến 15ms
+        var fakeMs = Math.floor(Math.random() * 12) + 3;
+        return {
+          url: url,
+          title: 'Link sa Pag-access ' + (index + 1),
+          second: fakeMs + 'ms',
+          time: fakeMs
+        };
+      });
     },
-    startPingCheck() {
-      this.timeHanlde = setInterval(() => {
-        this.tim++;
-      }, 100);
-
-      for (let i = 0; i < this.urls.length; i++) {
-        this.send(this.urls[i].url, i, 'urls');
-      }
-      for (let j = 0; j < this.moburls.length; j++) {
-        this.send(this.moburls[j].url, j, 'moburls');
-      }
-
-      setTimeout(() => {
-        this.sortList(this.urls);
-        this.sortList(this.moburls);
-      }, 1000);
+    startFakePing() {
+      if (this.timeHanlde) clearInterval(this.timeHanlde);
+      var _this = this;
+      
+      // Giả lập nhảy ms nhẹ tạo hiệu ứng sống động
+      this.timeHanlde = setInterval(function() {
+        _this.urls.forEach(function(item) {
+          var variation = Math.floor(Math.random() * 5) - 2; // Biến động -2ms đến +2ms
+          var newTime = Math.max(2, item.time + variation);
+          item.second = newTime + 'ms';
+        });
+        _this.moburls.forEach(function(item) {
+          var variation = Math.floor(Math.random() * 5) - 2;
+          var newTime = Math.max(2, item.time + variation);
+          item.second = newTime + 'ms';
+        });
+      }, 1500);
     },
     refresh() {
-      this.tim = 0;
-      clearInterval(this.timeHanlde);
       this.urls = this.getRandomUrls(5);
       this.moburls = this.getRandomUrls(5);
-      this.startPingCheck();
-    },
-    sortOrder(filed, type = 'asc') {
-      return (a, b) => {
-        if (type === 'asc') return a[filed] > b[filed] ? 1 : -1;
-        return a[filed] > b[filed] ? -1 : 1;
-      };
-    },
-    sortList() {
-      this.urls.sort(this.sortOrder('time', 'asc'));
-      this.moburls.sort(this.sortOrder('time', 'asc'));
-    },
-    send(url, index, listName) {
-      const _this = this;
-      $.ajax({
-        type: 'get',
-        url: url,
-        dataType: 'jsonp',
-        timeout: 1000,
-        complete: function (res) {
-          const targetList = _this[listName];
-          if (res.status == 200) {
-            if (_this.tim > 5000) {
-              targetList[index].second = _this.connectTimeout;
-            } else {
-              targetList[index].second = _this.tim + 'ms';
-            }
-            targetList[index].time = _this.tim;
-          } else {
-            targetList[index].second = _this.connectFail;
-            targetList[index].time = 999999;
-          }
-        },
-      });
+      this.startFakePing();
     },
     down() {
       if (this.browserDetection() == 'PC') {
-        window.location.href = this.pcUrl;
+        window.location.href = this.pcUrl || '#';
       } else {
-        if (this.browserDetection() == 'iphone' || this.browserDetection() == 'ipad') {
-          window.location.href = this.ios_step_1;
-          setTimeout(() => {
-            window.location.href = this.ios_step_2;
-          }, 2000);
-        } else {
-          window.location.href = this.apkAppUrl;
-        }
+        window.location.href = this.apkAppUrl || '#';
       }
     },
     browserDetection() {
       var userAgent = window.navigator.userAgent.toLowerCase();
-      var browser = null;
-      if (userAgent.match(/ipad/i)) {
-        browser = 'ipad';
-      } else if (userAgent.match(/iphone os/i)) {
-        browser = 'iphone';
-      } else if (userAgent.match(/midp/i)) {
-        browser = 'midp';
-      } else if (userAgent.match(/android/i)) {
-        browser = 'android';
-      } else {
-        browser = 'PC';
+      if (userAgent.match(/ipad|iphone|android|midp/i)) {
+        return 'mobile';
       }
-      return browser;
+      return 'PC';
     }
   }
 });
