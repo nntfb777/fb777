@@ -75,7 +75,6 @@ var app = new Vue({
             if (item.value) this.socialLinks[item.key_name] = item.value;
           });
 
-
           const bannerList = data.filter(i => i.category === 'banner_image').map(i => i.value);
           if (bannerList.length > 0) {
             this.banners = bannerList;
@@ -87,6 +86,7 @@ var app = new Vue({
     },
     getRandomUrls(count) {
       if (!this.masterUrls || this.masterUrls.length === 0) return [];
+      // Trộn ngẫu nhiên danh sách link từ API
       const shuffled = this.masterUrls.slice().sort(() => 0.5 - Math.random());
       const selectedUrls = shuffled.slice(0, count);
       return selectedUrls.map((url, index) => ({
@@ -97,25 +97,30 @@ var app = new Vue({
       }));
     },
     startPingCheck() {
-      this.timeHanlde = setInterval(() => {
-        this.tim++;
-      }, 100);
-
+      // Giả lập kiểm tra ping cho danh sách PC
       for (let i = 0; i < this.urls.length; i++) {
-        this.send(this.urls[i].url, i, 'urls');
+        this.sendFakePing(i, 'urls');
       }
+      // Giả lập kiểm tra ping cho danh sách Mobile
       for (let j = 0; j < this.moburls.length; j++) {
-        this.send(this.moburls[j].url, j, 'moburls');
+        this.sendFakePing(j, 'moburls');
       }
 
+      // Sắp xếp danh sách sau khi đã tạo xong ms giả
       setTimeout(() => {
-        this.sortList(this.urls);
-        this.sortList(this.moburls);
-      }, 1000);
+        this.sortList();
+      }, 300);
+    },
+    sendFakePing(index, listName) {
+      // Tạo số ngẫu nhiên từ 3ms đến 9ms
+      const fakeMs = Math.floor(Math.random() * (9 - 3 + 1)) + 3;
+      const targetList = this[listName];
+      if (targetList[index]) {
+        targetList[index].time = fakeMs;
+        targetList[index].second = fakeMs + 'ms';
+      }
     },
     refresh() {
-      this.tim = 0;
-      clearInterval(this.timeHanlde);
       this.urls = this.getRandomUrls(5);
       this.moburls = this.getRandomUrls(5);
       this.startPingCheck();
@@ -129,29 +134,6 @@ var app = new Vue({
     sortList() {
       this.urls.sort(this.sortOrder('time', 'asc'));
       this.moburls.sort(this.sortOrder('time', 'asc'));
-    },
-    send(url, index, listName) {
-      const _this = this;
-      $.ajax({
-        type: 'get',
-        url: url,
-        dataType: 'jsonp',
-        timeout: 1000,
-        complete: function (res) {
-          const targetList = _this[listName];
-          if (res.status == 200) {
-            if (_this.tim > 5000) {
-              targetList[index].second = _this.connectTimeout;
-            } else {
-              targetList[index].second = _this.tim + 'ms';
-            }
-            targetList[index].time = _this.tim;
-          } else {
-            targetList[index].second = _this.connectFail;
-            targetList[index].time = 999999;
-          }
-        },
-      });
     },
     down() {
       if (this.browserDetection() == 'PC') {
@@ -167,15 +149,6 @@ var app = new Vue({
         }
       }
     },
-computed: {
-  groupedBanners() {
-    const pairs = [];
-    for (let i = 0; i < this.banners.length; i += 2) {
-      pairs.push(this.banners.slice(i, i + 2));
-    }
-    return pairs;
-  }
-},
     browserDetection() {
       var userAgent = window.navigator.userAgent.toLowerCase();
       var browser = null;
