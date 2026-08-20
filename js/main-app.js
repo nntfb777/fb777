@@ -3,7 +3,7 @@ var app = new Vue({
   data: {
     timeHanlde: null,
     tim: 0,
-    masterUrls: [],
+    masterUrls: [], // Mảng rỗng, hoàn toàn dựa vào API
     urls: [],
     moburls: [],
     waitingText: "waiting",
@@ -20,12 +20,7 @@ var app = new Vue({
       agentLoginUrl: "http://fc.fb777.ac/",
       giftcodeUrl: ""
     },
-    banners: [
-      "images/banner/1.jpg",
-      "images/banner/2.jpg",
-      "images/banner/3.jpg",
-      "images/banner/4.jpg"
-    ],
+    banners: [],
     apiUrl: "https://linksbackend.nnt79g.workers.dev/api/admin/links?site_id=fb777"
   },
   computed: {
@@ -39,12 +34,7 @@ var app = new Vue({
     }
   },
   async mounted() {
-    // 1. Khởi tạo danh sách giả lập ban đầu
-    this.urls = this.getRandomUrls(5);
-    this.moburls = this.getRandomUrls(5);
-    this.startFakePing();
-
-    // 2. Tải link mới từ API Admin CMS
+    // Tải duy nhất dữ liệu từ API Admin CMS
     await this.fetchLinksFromApi();
   },
   methods: {
@@ -64,9 +54,11 @@ var app = new Vue({
           if (apk && apk.value) this.apkAppUrl = apk.value;
           if (pc && pc.value) this.pcUrl = pc.value;
 
+          // Lấy mảng link ping từ API
           var pings = data.filter(function(i) { return i.category === 'ping_link'; }).map(function(i) { return i.value; });
           if (pings.length > 0) {
             this.masterUrls = pings;
+            // Tiến hành khởi tạo và xáo trộn ngẫu nhiên danh sách link từ API
             this.refresh();
           }
 
@@ -81,7 +73,7 @@ var app = new Vue({
           }
         }
       } catch (err) {
-        console.log("Lỗi nạp API:", err);
+        console.error("Lỗi nạp link từ API:", err);
       }
     },
     getRandomUrls(count) {
@@ -89,7 +81,6 @@ var app = new Vue({
       var shuffled = this.masterUrls.slice().sort(function() { return 0.5 - Math.random(); });
       var selectedUrls = shuffled.slice(0, count);
       return selectedUrls.map(function(url, index) {
-        // Tạo sẵn chỉ số ping ngẫu nhiên từ 3ms đến 15ms
         var fakeMs = Math.floor(Math.random() * 12) + 3;
         return {
           url: url,
@@ -103,18 +94,21 @@ var app = new Vue({
       if (this.timeHanlde) clearInterval(this.timeHanlde);
       var _this = this;
       
-      // Giả lập nhảy ms nhẹ tạo hiệu ứng sống động
       this.timeHanlde = setInterval(function() {
-        _this.urls.forEach(function(item) {
-          var variation = Math.floor(Math.random() * 5) - 2; // Biến động -2ms đến +2ms
-          var newTime = Math.max(2, item.time + variation);
-          item.second = newTime + 'ms';
-        });
-        _this.moburls.forEach(function(item) {
-          var variation = Math.floor(Math.random() * 5) - 2;
-          var newTime = Math.max(2, item.time + variation);
-          item.second = newTime + 'ms';
-        });
+        if (_this.urls) {
+          _this.urls.forEach(function(item) {
+            var variation = Math.floor(Math.random() * 5) - 2;
+            var newTime = Math.max(2, item.time + variation);
+            item.second = newTime + 'ms';
+          });
+        }
+        if (_this.moburls) {
+          _this.moburls.forEach(function(item) {
+            var variation = Math.floor(Math.random() * 5) - 2;
+            var newTime = Math.max(2, item.time + variation);
+            item.second = newTime + 'ms';
+          });
+        }
       }, 1500);
     },
     refresh() {
