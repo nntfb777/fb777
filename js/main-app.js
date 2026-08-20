@@ -14,7 +14,7 @@ var app = new Vue({
     apkAppUrl: "",
     pcUrl: "",
     // Khai báo biến API backend của FB777
-    apiUrl: "https://linksbackend.nnt79g.workers.dev/api/admin/links/list?site_id=fb777"
+    apiUrl: "https://linksbackend.nnt79g.workers.dev/api/admin/links?site_id=fb777"
   },
   async mounted() {
     // 1. Tải dữ liệu link từ API
