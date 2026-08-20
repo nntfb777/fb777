@@ -28,7 +28,7 @@ createApp({
         "images/banner/3.jpg",
         "images/banner/4.jpg"
       ],
-      apiUrl: "https://linksbackend.nnt79g.workers.dev/api/admin/links/list?site_id=fb777"
+      apiUrl: "https://linksbackend.nnt79g.workers.dev/api/admin/links?site_id=fb777"
     };
   },
   computed: {
