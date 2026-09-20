@@ -28,7 +28,7 @@ var app = new Vue({
       "images/banner/5.jpg",
       "images/banner/6.jpg"
     ],
-    apiUrl: "https://linksbackend.nnt79g.workers.dev/api/admin/links?site_id=fb777"
+    apiUrl: "https://linksbackend.nnt79g.workers.dev/api/config?site_id=fb777"
   },
   computed: {
     groupedBanners() {
@@ -55,28 +55,24 @@ var app = new Vue({
         if (result.success && result.data) {
           const data = result.data;
 
-          const kefu = data.find(i => i.key_name === 'kefuUrl');
-          const apk = data.find(i => i.key_name === 'apkAppUrl');
-          const pc = data.find(i => i.key_name === 'pcUrl');
+          if (data.systemLinks) {
+            if (data.systemLinks.kefuUrl) this.kefuUrl = data.systemLinks.kefuUrl;
+            if (data.systemLinks.apkAppUrl) this.apkAppUrl = data.systemLinks.apkAppUrl;
+            if (data.systemLinks.pcUrl) this.pcUrl = data.systemLinks.pcUrl;
+          }
 
-          if (kefu) this.kefuUrl = kefu.value;
-          if (apk) this.apkAppUrl = apk.value;
-          if (pc) this.pcUrl = pc.value;
-
-          const pings = data.filter(i => i.category === 'ping_link').map(i => i.value);
-          if (pings.length > 0) {
-            this.masterUrls = pings;
+          if (data.masterUrls && data.masterUrls.length > 0) {
+            this.masterUrls = data.masterUrls;
             this.urls = this.getRandomUrls(5);
             this.moburls = this.getRandomUrls(5);
           }
 
-          data.filter(i => i.category === 'social_link').forEach(item => {
-            if (item.value) this.socialLinks[item.key_name] = item.value;
-          });
+          if (data.banners && data.banners.length > 0) {
+            this.banners = data.banners;
+          }
 
-          const bannerList = data.filter(i => i.category === 'banner_image').map(i => i.value);
-          if (bannerList.length > 0) {
-            this.banners = bannerList;
+          if (data.socialLinks) {
+            Object.assign(this.socialLinks, data.socialLinks);
           }
         }
       } catch (err) {
@@ -98,10 +94,8 @@ var app = new Vue({
       });
     },
     startPingCheck() {
-      // Xóa bộ đếm cũ nếu có
       if (this.timeHanlde) clearInterval(this.timeHanlde);
 
-      // Cập nhật ngẫu nhiên số ms liên tục mỗi 1.5 giây
       this.timeHanlde = setInterval(() => {
         if (this.urls && this.urls.length > 0) {
           this.urls.forEach(item => {
